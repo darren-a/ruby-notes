@@ -135,13 +135,16 @@ Note that with no arguments last will return the object that defines the end of 
 (10..20).last(3)   #=> [18, 19, 20]
 (10...20).last(3)  #=> [17, 18, 19]
 
+>> r = (0...5)
+=> 0...5
 >>
 >> r.count
 => 5
 >>
->> r1 = (0..5)
+>>
+>> r2 = (0..5)
 => 0..5
->> r1.count
+>> r2.count
 => 6
 ```
 
@@ -174,7 +177,7 @@ Note that with no arguments last will return the object that defines the end of 
 ```
 
 
-# Integer
+## Integer
 ```
 >> Integer.ancestors
 => [Integer, Numeric, Comparable, Object, Kernel, BasicObject]
@@ -292,7 +295,8 @@ explicit. Note: also look up gsub, global substitution)
 
 
 
-#### (a) to find the character code for a string element:
+##### (a) to find the ASCII code for a string element:
+"ord" is not very memorable (maybe "ABC order" helps?)
 ```
 >> "A".ord
 => 65
@@ -303,7 +307,7 @@ explicit. Note: also look up gsub, global substitution)
 >> "z".ord
 => 122
 ```
-#### (b) to find the char that corresponds to an ASCII code number:
+##### (b) to find the char that corresponds to an ASCII code number:
 ```
 >> 65.chr
 => "A"
