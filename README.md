@@ -28,7 +28,8 @@
 >> str[2]
 => "e"
 ```
-:first will work for an array (and others), not for string (likewise :last, :count and plenty of others)
+:first will work for an array (and others), not for string (likewise :last,  
+:count and plenty of others)
 ```
 >> str.first
 Traceback (most recent call last):
@@ -101,6 +102,7 @@ NoMethodError (undefined method `first' for "qwer":String)
 :first  
 :last  
 :[n]  
+:take  
 :each  
 :map  
 :reverse  
@@ -128,7 +130,8 @@ NoMethodError (undefined method `first' for "qwer":String)
 => 5
 ```
 WEIRD! I expected 4 to be last but it's by design, apparently (see: https://stackoverflow.com/questions/11467846/ruby-range-last-does-not-give-the-last-value-why)  
-Note that with no arguments last will return the object that defines the end of the range even if exclude_end? is true.
+Note that with no arguments last will return the object that defines the  
+end of the range even if exclude_end? is true.
 ```
 (10..20).last      #=> 20
 (10...20).last     #=> 20
@@ -213,13 +216,30 @@ Hi!
 => 3.0
 ```
 
+rand(n) gives a random # from 0...n  
+dice example:
+```
+irb(main):025:0> 10.times { p (rand(6) + 1) }
+5
+2
+6
+2
+5
+4
+1
+3
+5
+4
+```
+
 
 ## Symbol
 ```
 >> Symbol.ancestors
 => [Symbol, Comparable, Object, Kernel, BasicObject]
 ```
-for some reason the Symbol class doesn't have a :new method so you have to create a symbol with the shortcut (eg. sym = :my_symbol)
+for some reason the Symbol class doesn't have a :new method so you have  
+to create a symbol with the shortcut (eg. sym = :my_symbol)
 ```
 >> Array.respond_to?(:new)
 => true
@@ -263,7 +283,9 @@ to find out if an object inherits from Enumerable:
 
 
 ## Techniques
-NOTE: these are by no means proposed as optimal, or even that good. There are no doubt plenty of better ways out there but it's a work in progress.
+NOTE: these are by no means proposed as optimal, or even that good. There are no  
+doubt plenty of better ways out there but it's a work in progress.
+
 
 #### iterate through an enumerable (eg array)
 tbd  
@@ -276,17 +298,44 @@ looking at with a counter, say in an each loop)
 #### check if something is a vowel
 tbd  
 
-#### recursive solutions
-1) make sure there is always an "end stop"
-2) make sure when you call a method from within itself you're not sending the exact same input that this, 'outer' method received.
+#### recursive example
+```
+def fac(n)
+
+  # edge case(s)
+  return nil if n < 0
+
+  # end stop
+  return 1 if (n == 0) or (n == 1)
+
+  # other cases
+  # (make sure you're modifying the input in some way when
+  # you call yourself or you'll enter an infinite loop)
+  return ( n * fac(n - 1) )
+
+end
+
+=begin
+irb(main):049:0> fac(0)
+=> 1
+irb(main):051:0> fac(1)
+=> 1
+irb(main):053:0> fac(5)
+=> 120
+irb(main):077:0> fac(-3)
+=> nil
+=end
+```
+Why is factorial(0) defined as 1: http://mathforum.org/library/drmath/view/57128.html
 
 
-
-#### Fibonacci numbers (useful example of working backwards from the end of an array, and using Array:take)
+#### Fibonacci numbers  
+(useful example of working backwards from the end of an array, and using Array:take)
 ```
 # return first 'n' Fib numbers
 
 # a/A solution
+
 def fibs(n)
   fib_nums = [0, 1]
   return fib_nums.take(n) if n < 3
@@ -302,12 +351,19 @@ def fibs(n)
 end
 
 # my solution (below) was a decent effort and worked, but is not as good in several important ways.  
-Where a/A is better:   
+
+Where a/A's is better:   
 a) it's cleaner in general  
-b) it starts with an array of the first two numbers and handles all three initial conditions (n = 0; 1; 2) by using :take to grab from the start array  
-c) the 'until' reads naturally and stops when the array of solutions reaches 'n' - this closely matches the English problem description. Mine starts with 'i' as 1 (generally try to keep index counters starting at zero) and my condition stops at n - 1; it's a bit clunky  
-d) it's elegant and natural to look at the last two elements of the array when adding to make the next Fibonacci number as that is how they are mathematically defined. Mine starts at the beginning and looks ahead.  
-e) I used an explicit return but I probably wrote this before I was hip to Ruby's implicitness (not a big deal).  
+b) it starts with an array of the first two numbers and handles all three initial conditions  
+(n = 0; 1; 2) by using :take to grab from the start array  
+c) the 'until' reads naturally and stops when the array of solutions reaches 'n' - this closely  
+matches the English problem description. Mine starts with 'i' as 1 (generally try to keep index  
+counters starting at zero) and my condition stops at n - 1; it's a bit clunky.  
+d) it's elegant and natural to look at the last two elements of the array when adding to make  
+the next Fibonacci number as that is how they are mathematically defined. Mine starts at the  
+beginning and looks ahead.  
+e) I used an explicit return but I probably wrote this before I was hip to Ruby's implicitness  
+(not a big deal).  
 
 
 def fibs(n)
@@ -324,8 +380,9 @@ end
 ```
 
 
-#### to replace parts of a string (.tr probably means transform but ri isn't
-explicit. Note: also look up gsub, global substitution)
+#### to replace parts of a string  
+(.tr maybe means "transform" but ri isn't explicit. Note: also look up gsub,  
+global substitution)
 
 ```
 >> "hello".tr('el', 'ip')
@@ -340,7 +397,7 @@ explicit. Note: also look up gsub, global substitution)
 
 
 #### bubble sort (iterate through a fixed outer loop with an ever-decreasing inner loop)
-
+tbd  
 
 
 ##### (a) to find the ASCII code for a string element:
