@@ -108,6 +108,20 @@ NoMethodError (undefined method `first' for "qwer":String)
 :reverse  
 :uniq  
 
+shortcut for strings so you don't need to type " " etc:  
+```
+irb(main):021:0> arr = %w[a, b, c, d, e, f, g]
+=> ["a,", "b,", "c,", "d,", "e,", "f,", "g"]
+```
+
+often better, create array from a range:  
+```
+irb(main):028:0> arr = ("A".."Z").to_a
+=> ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+"P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+```
+
+
 
 
 ## Range
@@ -316,6 +330,8 @@ def fac(n)
   return nil if n < 0
 
   # end stop
+  # (you must have some way the repeated calls to this
+  # method eventually come to a conclusion)
   return 1 if (n == 0) or (n == 1)
 
   # other cases
