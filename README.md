@@ -160,16 +160,26 @@ end of the range even if exclude_end? is true.
 ```
 
 ```
->> h = {CA: "Sacramento"}
+>> blank_hash = {}
+=> {}
+>>
+>> # create has with a key-value pair
+>> my_hash = {CA: "Sacramento"}
 => {:CA=>"Sacramento"}
->> h[:NY] = "Albany"
+>>
+>> # add a new k-v pair to existing hash
+>> my_hash[:NY] = "Albany"
 => "Albany"
->> h
+>>
+>> my_hash
 => {:CA=>"Sacramento", :NY=>"Albany"}
-
->> h.keys
+>>
+>> # show all keys
+>> my_hash.keys
 => [:CA, :NY]
->> h.values
+>>
+>> # show all values
+>> my_hash.values
 => ["Sacramento", "Albany"]
 ```
 
