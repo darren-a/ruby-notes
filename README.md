@@ -266,7 +266,7 @@ to find out if an object inherits from Enumerable:
 NOTE: these are by no means proposed as optimal, or even that good. There are no doubt plenty of better ways out there but it's a work in progress.
 
 #### iterate through an enumerable (eg array)
-
+tbd  
 
 #### find/create an "exclusion" array (ie. an array containing every
 element but a specific one - usually the one you're currently
@@ -274,6 +274,12 @@ looking at with a counter, say in an each loop)
 
 
 #### check if something is a vowel
+tbd  
+
+#### recursive solutions
+1) make sure there is always an "end stop"
+2) make sure when you call a method from within itself you're not sending the exact same input that this, 'outer' method received.
+
 
 
 #### Fibonacci numbers (useful example of working backwards from the end of an array, and using Array:take)
@@ -295,10 +301,14 @@ def fibs(n)
   fib_nums
 end
 
-# my solution was ok-ish and worked but is not as good. Where a/A is better:   
+# my solution (below) was a decent effort and worked, but is not as good in several important ways.  
+Where a/A is better:   
 a) it's cleaner in general  
-b) it starts with an array of the first two numbers and handles all three initial conditions (n = 0; 1; 2) by using :take to grab from the start array
-c) the 'until' reads naturally and stops when the array of solutions reaches 'n'; closely matches the problem description. Mine starts with 'i' as 1 (generally try to keep index counters starting at zero) and my end condition stops at n - 1 
+b) it starts with an array of the first two numbers and handles all three initial conditions (n = 0; 1; 2) by using :take to grab from the start array  
+c) the 'until' reads naturally and stops when the array of solutions reaches 'n' - this closely matches the English problem description. Mine starts with 'i' as 1 (generally try to keep index counters starting at zero) and my condition stops at n - 1; it's a bit clunky  
+d) it's elegant and natural to look at the last two elements of the array when adding to make the next Fibonacci number as that is how they are mathematically defined. Mine starts at the beginning and looks ahead.  
+e) I used an explicit return but I probably wrote this before I was hip to Ruby's implicitness (not a big deal).  
+
 
 def fibs(n)
   return [0] if n == 1
@@ -354,10 +364,10 @@ explicit. Note: also look up gsub, global substitution)
 
 ## Object / Class stuff
 ```
->> obj = Object.new
+>> my_obj = Object.new
 => #<Object:0x00007f8db2026dd0>
 
->> obj.class.ancestors
+>> my_obj.class.ancestors
 => [Object, Kernel, BasicObject]
 
 >> Object.instance_methods.sort
@@ -375,7 +385,7 @@ explicit. Note: also look up gsub, global substitution)
 >> Object.instance_methods.grep(/clo/)
 => [:clone]
 >>
->> obj.methods.grep(/clo/)
+>> my_obj.methods.grep(/clo/)
 => [:clone]
 >>
 >> {}.class.ancestors
@@ -444,14 +454,18 @@ ends with "e":
 ```
 
 ```
->> h
+>> my_hash
 => {:CA=>"Sacramento", :NY=>"Albany"}
->> h.values
+>>
+>> my_hash.values
 => ["Sacramento", "Albany"]
->> h.keys.grep(/CA/)
+>>
+>> my_hash.keys.grep(/CA/)
 => [:CA]
->> h.keys
+>>
+>> my_hash.keys
 => [:CA, :NY]
-> h.values.grep(/acr/)
+>>
+> my_hash.values.grep(/acr/)
 => ["Sacramento"]
 ```
