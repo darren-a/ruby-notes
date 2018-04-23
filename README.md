@@ -19,6 +19,8 @@
 :ljust  
 :each_char  
 :chars  
+:tr  
+
 
 ```
 >> str = "qwer"
@@ -321,6 +323,34 @@ looking at with a counter, say in an each loop)
 
 #### check if something is a vowel
 tbd  
+
+#### sum of series (or partial series)
+```
+def sum_to(n)
+  # sum of a series = number of terms * ( (1st term + nth term) / 2 )
+  # eg. 100 terms: 100 * ( (1 + 100) / 2 ) = 100 * 50.5 = 5050
+  # (I remember it as: "# of terms * avg of first and last")
+
+  return nil if n < 1
+  float_sum = n * ( (1 + n) / 2.0 )
+  sum = float_sum.to_i
+end
+
+=begin
+>> sum_to(1)
+=> 1
+>> sum_to(3)
+=> 6
+>> sum_to(100)
+=> 5050
+>> sum_to(5)
+=> 15
+>> sum_to(0)
+=> nil
+>> sum_to(-4)
+=> nil
+=end
+```
 
 #### recursive example
 ```
