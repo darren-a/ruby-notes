@@ -276,6 +276,44 @@ looking at with a counter, say in an each loop)
 #### check if something is a vowel
 
 
+#### Fibonacci numbers (useful example of working backwards from the end of an array, and using Array:take)
+```
+# return first 'n' Fib numbers
+
+# a/A solution
+def fibs(n)
+  fib_nums = [0, 1]
+  return fib_nums.take(n) if n < 3
+  # n = 0 => []
+  # n == 1 => [0]
+  # n == 2 => [0, 1]
+
+  until fib_nums.length == n
+    fib_nums << fib_nums[-2] + fib_nums[-1]
+  end
+
+  fib_nums
+end
+
+# my solution was ok-ish and worked but is not as good. Where a/A is better:   
+a) it's cleaner in general  
+b) it starts with an array of the first two numbers and handles all three initial conditions (n = 0; 1; 2) by using :take to grab from the start array
+c) the 'until' reads naturally and stops when the array of solutions reaches 'n'; closely matches the problem description. Mine starts with 'i' as 1 (generally try to keep index counters starting at zero) and my end condition stops at n - 1 
+
+def fibs(n)
+  return [0] if n == 1
+  result = [0, 1]
+
+  i = 1
+  while i < n - 1
+    result << result[i] + result[i - 1]
+    i += 1
+  end
+  return result
+end
+```
+
+
 #### to replace parts of a string (.tr probably means transform but ri isn't
 explicit. Note: also look up gsub, global substitution)
 
