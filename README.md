@@ -20,6 +20,9 @@
 :each_char  
 :chars  
 :tr  
+:count  
+:scan  
+
 
 
 ```
@@ -57,7 +60,7 @@ NoMethodError (undefined method `first' for "qwer":String)
 => 4
 ```
 
-.strip whitespace
+strip whitespace (from front and back of string)
 ```
 >> a = "  stuff       "
 => "  stuff       "
@@ -71,6 +74,22 @@ NoMethodError (undefined method `first' for "qwer":String)
 => "stuff"
 >> a
 => "  stuff       "
+```
+
+example of removing all whitespace from a string
+```
+def Palindrome(str)
+
+  # :gsub, global substitution (also check out :scan)
+  # bang to mutate;
+  # / / to denote regex;
+  # \s+ => one or more whitespace
+  # replace with nothing ""
+  str.gsub!(/\s+/, "")  
+  p str
+  str == str.reverse
+
+end
 ```
 
 "bang" methods will generally mutate the receiver (or do other "risky" stuff)
@@ -92,6 +111,12 @@ NoMethodError (undefined method `first' for "qwer":String)
 >>
 ```
 
+count number of vowels in a string:  
+```
+irb#1(main):051:0> "facetious".count("aeiou")
+=> 5
+```
+
 
 ## Array
 ```
@@ -107,8 +132,11 @@ NoMethodError (undefined method `first' for "qwer":String)
 :take  
 :each  
 :map  
+:reduce  
 :reverse  
 :uniq  
+
+
 
 shortcut for strings so you don't need to type " " etc:  
 ```
@@ -123,6 +151,28 @@ irb(main):028:0> arr = ("A".."Z").to_a
 "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 ```
 
+to remove single character parts from an array:
+```
+arr -= [nil, '']
+#=> [1, 2, "s", "d"]
+
+# or something like this
+
+> arr = [4, 5, 6, nil, '', 7, 8, '']
+=> [4, 5, 6, nil, "", 7, 8, ""]
+>
+> clean_arr = arr - [nil, ""]
+=> [4, 5, 6, 7, 8]
+
+# also look at :compact and :delete_if
+```
+
+to remove general whitespace and control chars from an array:
+```
+> arr = [1, 2, "s", nil, "     ", "d", "\n"]
+> arr.reject!{|a| a.nil? || (a.to_s.strip.empty?) }
+> [1, 2, "s", "d"]
+```
 
 
 
@@ -135,6 +185,8 @@ irb(main):028:0> arr = ("A".."Z").to_a
 :first  
 :last  
 :each  
+:step
+
 
 ```
 >> r = (0...5)
@@ -198,6 +250,12 @@ end of the range even if exclude_end? is true.
 >> my_hash.values
 => ["Sacramento", "Albany"]
 ```
+
+## Object
+
+:clone  
+
+
 
 ## Float
 ```
@@ -329,7 +387,7 @@ tbd
 def sum_to(n)
   # sum of a series = number of terms * ( (1st term + nth term) / 2 )
   # eg. 100 terms: 100 * ( (1 + 100) / 2 ) = 100 * 50.5 = 5050
-  # (I remember it as: "# of terms * avg of first and last")
+  # (I remember it as: "# of terms * avg of first + last")
 
   return nil if n < 1
   float_sum = n * ( (1 + n) / 2.0 )
