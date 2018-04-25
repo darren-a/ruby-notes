@@ -511,7 +511,47 @@ global substitution)
 
 
 #### bubble sort (iterate through a fixed outer loop with an ever-decreasing inner loop)
-tbd  
+```
+def bubble_sort(arr)
+
+  return [] if arr.empty?
+  puts "start arr is: #{arr}\n\n"
+
+  i = 0
+  while i < arr.length
+
+    j = 0
+    while j < (arr.length - 1) - i
+      puts "\tentered j loop"
+      puts "\tnum is:           #{arr[j]}"
+      puts "\tnum following is: #{arr[j+1]}"
+      if arr[j] > arr[j+1]
+        temp = arr[j]
+        arr[j] = arr[j+1]
+        arr[j+1] = temp
+        puts "swap. arr is now: #{arr}"
+      else
+        puts "\tno swap needed"
+      end
+      j += 1
+      puts "j is now: #{j}\n\n"
+    end
+
+  i += 1
+  end
+  arr
+
+end
+
+puts("\nTests for #bubble_sort")
+puts("===============================================")
+    #puts "bubble_sort([]) == []: "  + (bubble_sort([]) == []).to_s
+    #puts "bubble_sort([1]) == [1]: "  + (bubble_sort([1]) == [1]).to_s
+    #puts "bubble_sort([9, 4, 1]) == [1, 4, 9]: "  + (bubble_sort([9, 4, 1]) == [1, 4, 9]).to_s
+    #puts "bubble_sort([5, 4, 3, 2, 1]) == [1, 2, 3, 4, 5]: "  + (bubble_sort([5, 4, 3, 2, 1]) == [1, 2, 3, 4, 5]).to_s
+    puts "bubble_sort([51, 34, 35, 12, 1, 65, 14, 8]) == [1, 8, 12, 14, 34, 35, 51, 65]: "  + (bubble_sort([51, 34, 35, 12, 1, 65, 14, 8]) == [1, 8, 12, 14, 34, 35, 51, 65]).to_s
+puts("===============================================")
+```
 
 
 ##### (a) to find the ASCII code for a string element:
@@ -593,7 +633,7 @@ https://www.safaribooksonline.com/library/view/ruby-cookbook/0596523696/ch05s15.
 => true
 >>
 ```
-*use grep on arrays* (noting that :keys and :values in Hash give array results)
+*use grep on arrays* (noting that Hash:keys and Hash:values return arrays)
 ```
 >> [].respond_to?(:grep)
 => true
