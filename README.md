@@ -125,16 +125,30 @@ irb#1(main):051:0> "facetious".count("aeiou")
 ```
 :count  
 :length  
+:size # alias for :length  
 :count  
 :first  
 :last  
 :[n]  
-:take  
+:take
 :each  
 :map  
 :reduce  
 :reverse  
 :uniq  
+
+(part 2 stuff)
+:reduce  
+:permutation  
+:repeated_permutation  
+:combination  
+:repeated_combination  
+:all  
+:max  
+:min  
+:clear  
+:compact  
+
 
 
 
@@ -174,6 +188,10 @@ to remove general whitespace and control chars from an array:
 > [1, 2, "s", "d"]
 ```
 
+```
+> array = [1, 2, 3, 4]       # => [1, 2, 3, 4]
+> array.reduce(0, :+) => 10  # initial value is 0; action is to sum each element
+```
 
 
 ## Range
@@ -252,8 +270,21 @@ end of the range even if exclude_end? is true.
 ```
 
 ## Object
+```
+> Object.ancestors
+=> [Object, Kernel, BasicObject]
+```
 
-:clone  
+:class  
+:inspect  
+:object_id  
+:clone
+:dup   
+:freeze  
+:frozen?  
+:methods  
+:method  
+
 
 
 
@@ -269,6 +300,22 @@ end of the range even if exclude_end? is true.
 >> Integer.ancestors
 => [Integer, Numeric, Comparable, Object, Kernel, BasicObject]
 ```
+:ceil  
+:floor  
+:round  
+:even?  
+:odd?  
+:lcm  
+:gcd  
+:chr  
+:ord  # returns itself (for compatibility)
+:times
+:downto
+:upto
+:next  
+: <<
+: >>
+
 
 ```
 >> 3.times do
@@ -285,6 +332,12 @@ Hi!
 Hi!
 => 3
 >>
+```
+downto example:
+```
+5.downto(1) { |n| print n, ".. " }
+print "  Liftoff!\n"
+#=> "5.. 4.. 3.. 2.. 1..   Liftoff!"
 ```
 
 
@@ -342,13 +395,33 @@ darren
 => nil
 ```
 
-## Enumerables
+## Enumerable
 
 to find out if an object inherits from Enumerable:
 ```
 >> [1,2,3].class.ancestors
 => [Array, Enumerable, Object, Kernel, BasicObject]
 ```
+:sort  
+:uniq  
+:find  
+:find_all  
+:find_index
+:drop  
+:take   
+:map  
+:reduce  
+:inject  
+:max  
+:min  
+:member?  
+:all?  
+:any?  
+:include?  
+:none?  
+:one?  
+
+
 
 ```
 >> [1,2,3].min
@@ -362,6 +435,14 @@ to find out if an object inherits from Enumerable:
 >>
 >> (9...21000).max
 => 20999
+```
+
+
+## Enumerator
+
+```
+irb(main):004:0> Enumerator.ancestors
+=> [Enumerator, Enumerable, Object, Kernel, BasicObject]
 ```
 
 
@@ -679,4 +760,27 @@ ends with "e":
 >>
 > my_hash.values.grep(/acr/)
 => ["Sacramento"]
+```
+
+Smiley Face example
+face:
+a) must start with eyes of : or ;
+b) may or may not have a nose of - or ~
+c) must end with mouth of ) or D
+implicit is no whitespace at all and only 2 or 3 chars
+
+this is a hybrid; tried full regex but got too messy for me
+```
+def count_smileys(arr)
+
+  result = 0
+  arr.each do |face|
+    next if face.match(/\s/) || face.length > 3
+    result += 1 if face
+                       .match(/^[:|;]/) && face
+                       .match(/[-|~]?/) && face
+                       .match(/[)|D]$/)
+  end
+  result
+end
 ```
