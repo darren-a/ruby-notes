@@ -22,6 +22,7 @@
 :tr  
 :count  
 :scan  
+:match  (see Smiley Face example in regex section)
 
 
 
@@ -132,7 +133,8 @@ irb#1(main):051:0> "facetious".count("aeiou")
 :[n]  
 :take
 :each  
-:map  
+:each_with_index  
+:map  (also you can chain .with_index to map)
 :reduce  
 :reverse  
 :uniq  
@@ -148,6 +150,10 @@ irb#1(main):051:0> "facetious".count("aeiou")
 :min  
 :clear  
 :compact  
+:select  
+:reject  
+:sort_by  
+
 
 
 
@@ -188,10 +194,24 @@ to remove general whitespace and control chars from an array:
 > [1, 2, "s", "d"]
 ```
 
+count  
+```
+[1, 2, 3, 3, 2, 1].count #=> 6
+[1, 2, 3, 3, 2, 1].count(2) #=> 2
+[1, 2, 3, 3, 2, 1].count {|int| int.odd?} #=> 4
+```
+
+reduce  
 ```
 > array = [1, 2, 3, 4]       # => [1, 2, 3, 4]
 > array.reduce(0, :+) => 10  # initial value is 0; action is to sum each element
 ```
+
+map  
+
+
+map.with_index  (NOTE: this is chained, not a single method)
+
 
 
 ## Range
@@ -416,9 +436,9 @@ to find out if an object inherits from Enumerable:
 :min  
 :member?  
 :all?  
-:any?  
-:include?  
+:any?
 :none?  
+:include?  
 :one?  
 
 
@@ -435,6 +455,13 @@ to find out if an object inherits from Enumerable:
 >>
 >> (9...21000).max
 => 20999
+```
+
+all?  
+```
+def all_even?(arr)
+  arr.all? {|int| int.even?}
+end
 ```
 
 
@@ -783,4 +810,40 @@ def count_smileys(arr)
   end
   result
 end
+```
+
+## Script
+
+```
+#!/usr/bin/env ruby
+def say_hello(name)
+  puts "Hey there, #{name}!"
+end
+
+if $PROGRAM_NAME == __FILE__
+  name = gets.chomp
+  say_hello(name)
+end
+```
+
+
+## Matrix
+
+part of the "sum of all set" problem, using simple arrays here.
+
+```
+> arr1
+=> [3, 4, 5, 1]
+>
+> arr2
+=> [1, 0, 1, 0]
+>
+> sum = (arr1.map.with_index {|el, idx| el * arr2[idx]}).reduce(:+)
+=> 8
+```
+
+Matrix module inner_product (same as 'dot'?) and cross_product should be useful here as well (require )
+```
+> a.methods.sort.grep(/prod/)
+=> [:cross_product, :inner_product]
 ```
