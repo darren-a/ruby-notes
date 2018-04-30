@@ -136,6 +136,7 @@ irb#1(main):051:0> "facetious".count("aeiou")
 :each_with_index  
 :map  (also you can chain .with_index to map)
 :reduce  
+:inject  
 :reverse  
 :uniq  
 
@@ -257,12 +258,85 @@ end of the range even if exclude_end? is true.
 => 6
 ```
 
+use "===" to check if num is in range   
+```
+irb(main):078:0> (1..25) === 14
+=> true
+irb(main):079:0>
+irb(main):081:0> (1..25) === 25
+=> true
+irb(main):082:0>
+irb(main):083:0> (1...25) === 25
+=> false
+```
+other  
+```
+# create array
+irb(main):088:0> (1..9).to_a
+=> [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# create arrays with Range's new method (exc and inc)
+irb(main):094:0> digits = Range.new(1, 9, true).to_a
+=> [1, 2, 3, 4, 5, 6, 7, 8]
+irb(main):095:0> digits = Range.new(1, 9).to_a
+=> [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+flip flop (the logic of this confuses me)
+it's basically:  
+- false until LHS evaluates to true (ie. when n == 2)
+- remains true until RHS evaluates to true; so keep printing nums until n >= 5  
+(so why is '5' printed out?)   
+```
+irb(main):105:0> (1..7).each {|n| puts n if n == 2..n >= 5}
+2
+3
+4
+5
+=> 1..7
+```
+
 
 
 ## Hash
 ```
 >> {}.class.ancestors
 => [Hash, Enumerable, Object, Kernel, BasicObject]
+```
+:size  
+:length  
+:count  
+:keys  
+:values  
+:to_a  (converts to nested array of [key, value] arrays)  
+:each  (takes two args: |k, v| for example)  
+:each_key
+:each_value
+:each_pair     
+:has_value?  
+:value? (same as "has_value?"")  
+:select  
+:reject  
+:delete  
+:sort_by  (ex to sort by key  
+  ```
+  my_hash = {b: 11, a: 100, c: -25}
+  my_hash.sort_by {|k, v| k} #=> [[:a, 100], [:b, 11], [:c, -25]]
+  ```
+:include? # tests if hash includes its arg as a key  
+:has_key?  (same as "include?")  
+:key?  (same as "include?")  
+:empty?  
+:any?    
+
+shortcut for creation if using symbol keys (v common):
+```
+irb(main):425:0> my_hash = {:CA => "Sacramento"}
+=> {:CA=>"Sacramento"}
+```
+is the same as:
+```
+irb(main):428:0> my_hash1 = {CA: "Sacramento"}
+=> {:CA=>"Sacramento"}
 ```
 
 ```
@@ -289,6 +363,38 @@ end of the range even if exclude_end? is true.
 => ["Sacramento", "Albany"]
 ```
 
+####counter hash and using default start values  
+
+use the "new" method in Hash class to create a new hash object with default values:
+```
+irb(main):445:0> my_hash = Hash.new(0)
+=> {}
+irb(main):446:0>
+irb(main):447:0> my_hash[:a]
+=> 0
+```
+count num of occurrences of each letter in string:
+```
+irb(main):483:0> letter_counts = Hash.new(0)
+=> {}
+irb(main):542:0> str = "The quick brown fox jumps over the lazy dog"
+=> "The quick brown fox jumps over the lazy dog"
+irb(main):485:0>
+irb(main):502:0> letters = str.split("") - [" "]
+=> ["T", "h", "e", "q", "u", "i", "c", "k", "b", "r", "o", "w", "n", "f", "o", "x", "j", "u", "m", "p", "s", "o", "v", "e", "r", "t", "h", "e", "l", "a", "z", "y", "d", "o", "g"]
+irb(main):485:0>
+irb(main):486:0> letters.each do |l|
+irb(main):487:1*   letter_counts[l.downcase] += 1
+irb(main):488:1> end
+irb(main):488:1>
+irb(main):557:0> letter_counts
+=> {"t"=>4, "h"=>4, "e"=>7, "q"=>2, "u"=>4, "i"=>2, "c"=>2, "k"=>2, "b"=>2, "r"=>4, "o"=>8, "w"=>2, "n"=>2, "f"=>2, "x"=>2, "j"=>2, "m"=>2, "p"=>2, "d"=>3, "v"=>2, "l"=>2, "a"=>2, "z"=>2, "y"=>2, "g"=>2, "s"=>1}
+irb(main):558:0>
+irb(main):559:0> letter_counts.length
+=> 26
+```
+
+
 ## Object
 ```
 > Object.ancestors
@@ -298,8 +404,8 @@ end of the range even if exclude_end? is true.
 :class  
 :inspect  
 :object_id  
-:clone
-:dup   
+:clone (note: a clone of a frozen object is also frozen)
+:dup  (note: a dup of a frozen object is not frozen)
 :freeze  
 :frozen?  
 :methods  
@@ -390,6 +496,28 @@ irb(main):025:0> 10.times { p (rand(6) + 1) }
 ```
 
 
+## Time
+```
+> Time.public_methods(false)
+=> [:now, :at, :utc, :gm, :local, :mktime, :new, :allocate, :superclass]
+>
+> t1 = Time.now; t2 = Time.new  # check on what the differences are
+=> 2018-04-28 18:20:37 -0700
+```
+
+strftime  
+```
+> t2.strftime("%d")
+=> "28"
+> t2.strftime("%c")
+=> "Sat Apr 28 18:20:37 2018"
+```
+%d - day of month  
+%D - date  
+%c - date, time  
+
+
+
 ## Symbol
 ```
 >> Symbol.ancestors
@@ -462,6 +590,36 @@ all?
 def all_even?(arr)
   arr.all? {|int| int.even?}
 end
+```
+
+permutations and combination  
+```
+irb(main):305:0> [:a,:b,:c].repeated_permutation(2).each { |el|  p el }
+[:a, :a] # repeated self  
+[:a, :b]
+[:a, :c]
+[:b, :a]
+[:b, :b] # repeated self  
+[:b, :c]
+[:c, :a]
+[:c, :b]
+[:c, :c] # repeated self  
+=> [:a, :b, :c]
+irb(main):306:0>
+irb(main):309:0> [:a,:b,:c].permutation(2).each { |el|  p el }
+[:a, :b]
+[:a, :c]
+[:b, :a] # same as :a :b  
+[:b, :c]
+[:c, :a] # same as :a :c  
+[:c, :b] # same as :c :b  
+=> [:a, :b, :c]
+irb(main):310:0>
+irb(main):311:0> [:a,:b,:c].combination(2).each { |el|  p el }
+[:a, :b]
+[:a, :c]
+[:b, :c]
+=> [:a, :b, :c]
 ```
 
 
@@ -681,7 +839,7 @@ puts("===============================================")
 ```
 
 
-## Object / Class stuff
+## Introspection
 ```
 >> my_obj = Object.new
 => #<Object:0x00007f8db2026dd0>
@@ -709,20 +867,31 @@ puts("===============================================")
 >>
 >> {}.class.ancestors
 => [Hash, Enumerable, Object, Kernel, BasicObject]
->>
->> Hash.ancestors
-=> [Hash, Enumerable, Object, Kernel, BasicObject]
->>
->> Range.ancestors
-=> [Range, Enumerable, Object, Kernel, BasicObject]
->>
->> true.class.ancestors
-=> [TrueClass, Object, Kernel, BasicObject]
->>
->> false.class.ancestors
-=> [FalseClass, Object, Kernel, BasicObject]
 ```
 
+to see methods without those of ancestor classes:
+```
+irb(main):502:0> Ripper.public_methods(false).sort
+=> [:allocate, :dedent_string, :lex, :lex_state_name, :new, :parse, :sexp, :sexp_raw, :slice, :superclass, :token_match, :tokenize]
+```
+
+in pry you can cd to an object and run ls to see methods
+```
+[28] pry(main)> cd []
+[29] pry(#<Array>):1>
+[30] pry(#<Array>):1>
+[31] pry(#<Array>):1>
+[32] pry(#<Array>):1> ls
+Enumerable#methods:
+  all?            each_entry        find_all  lazy       none?         slice_when
+  chunk           each_slice        flat_map  max_by     one?          sort_by   
+  chunk_while     each_with_index   grep      member?    partition     to_set    
+  collect_concat  each_with_object  grep_v    min_by     reduce      
+  detect          entries           group_by  minmax     slice_after
+  each_cons       find              inject    minmax_by  slice_before
+Array#methods:
+  &              concat
+  ```
 
 
 ## Regex, patterns, grep etc
