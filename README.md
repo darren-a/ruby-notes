@@ -135,6 +135,7 @@ irb#1(main):051:0> "facetious".count("aeiou")
 :each  
 :each_with_index  
 :map  (also you can chain .with_index to map)
+:map! (remember that map does NOT mutate unless you use the bang version!!)
 :reduce  
 :inject  
 :reverse  
@@ -154,7 +155,7 @@ irb#1(main):051:0> "facetious".count("aeiou")
 :select  
 :reject  
 :sort_by  
-
+:to_h  (converts nested array of two-element arrays to a hash)  
 
 
 
@@ -313,7 +314,10 @@ irb(main):105:0> (1..7).each {|n| puts n if n == 2..n >= 5}
 :each_value
 :each_pair     
 :has_value?  
-:value? (same as "has_value?"")  
+:value? (same as "has_value?")
+:has_key?
+:include?  (same as "has_key?")
+:key? (same as "has_key?")    
 :select  
 :reject  
 :delete  
@@ -392,6 +396,12 @@ irb(main):557:0> letter_counts
 irb(main):558:0>
 irb(main):559:0> letter_counts.length
 => 26
+
+# find second most popular letter:  
+irb(main):597:0> frequency_array = letter_counts.sort_by {|k,v| v}
+=> [["g", 1], ["v", 1], ["l", 1], ["a", 1], ["z", 1], ["y", 1], ["d", 1], ["q", 1], ["i", 1], ["c", 1], ["k", 1], ["b", 1], ["w", 1], ["n", 1], ["f", 1], ["x", 1], ["j", 1], ["m", 1], ["p", 1], ["s", 1], ["h", 2], ["u", 2], ["t", 2], ["r", 2], ["e", 3], ["o", 4]]
+irb(main):598:0> frequency_array[-2].first  # return the first element from the second array from the end  
+=> "e"
 ```
 
 
@@ -552,7 +562,7 @@ to find out if an object inherits from Enumerable:
 ```
 :sort  
 :uniq  
-:find  
+:find  (passes each entry in enum to block; finds the first entry for which block is true)
 :find_all  
 :find_index
 :drop  
@@ -628,6 +638,80 @@ irb(main):311:0> [:a,:b,:c].combination(2).each { |el|  p el }
 ```
 irb(main):004:0> Enumerator.ancestors
 => [Enumerator, Enumerable, Object, Kernel, BasicObject]
+```
+
+## Set  
+(not part of core Ruby)  
+```
+irb(main):850:0> Set.ancestors
+=> [Set, Enumerable, Object, Kernel, BasicObject]
+```
+notes:  
+- all elements unique
+- if you add an existing object to the set nothing will happen
+
+```
+require 'set'
+```
+:<<  
+:add  
+:delete
+:&  (intersection)  
+:+  (union)  
+:|  (union)
+:-  (difference)  
+:^  (xor - members of set A and set B but not both)  
+:merge  
+:subset  
+:superset  
+:proper_subset  
+:proper_superset  
+
+
+Examples:  
+
+new_england = Set.new(["Connecticut", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont"])  
+tri_state = Set.new(["Connecticut", "New Jersey", "New York"])
+
+
+```
+irb(main):839:0> new_england = ["Connecticut", "Maine", "Massachusetts", "New Hampshire",
+irb(main):840:1*                "Rhode Island", "Vermont"]
+=> ["Connecticut", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont"]
+irb(main):844:0> require 'set'
+=> true
+irb(main):845:0>
+irb(main):846:0> state_set = Set.new(new_england)
+=> #<Set: {"Connecticut", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont"}>
+
+```
+
+
+intersection, use '&'  
+```
+irb(main):864:0>
+irb(main):865:0> state_set & tri_state
+=> #<Set: {"Connecticut"}>
+```
+union, use '+' or '|'  
+```
+irb(main):868:0> state_set + tri_state
+=> #<Set: {"Connecticut", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont", "New Jersey", "New York"}>
+irb(main):869:0>
+irb(main):870:0> state_set | tri_state
+=> #<Set: {"Connecticut", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont", "New Jersey", "New York"}>
+```
+
+difference, use '-'  
+```
+irb(main):872:0> state_set - tri_state
+=> #<Set: {"Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont"}>
+```
+
+xor, use '^'
+```
+irb(main):876:0> state_set ^ tri_state
+=> #<Set: {"New Jersey", "New York", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont"}>
 ```
 
 
