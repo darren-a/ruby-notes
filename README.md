@@ -641,7 +641,7 @@ irb(main):004:0> Enumerator.ancestors
 ```
 
 ## Set  
-(not part of core Ruby)  
+(not part of core Ruby, so you need: _require 'set'_)  
 ```
 irb(main):850:0> Set.ancestors
 => [Set, Enumerable, Object, Kernel, BasicObject]
@@ -649,18 +649,20 @@ irb(main):850:0> Set.ancestors
 notes:  
 - all elements unique
 - if you add an existing object to the set nothing will happen
+- if you try to delete an object that isn't in the set nothing will happen
 
 ```
 require 'set'
 ```
 :<<  
 :add  
+:add?  (returns nil (rather than the set itself) if an add operation fails)
 :delete
 :&  (intersection)  
 :+  (union)  
 :|  (union)
 :-  (difference)  
-:^  (xor - members of set A and set B but not both)  
+:^  (xor - members of set A + members of set B but not members of both)  
 :merge  
 :subset  
 :superset  
@@ -857,7 +859,15 @@ global substitution)
 >>
 >> "hello".tr('aeiou', 'AA*')
 => "hAll*"
+
+# remove non-vowel letters from a word:
+>> "facetious".tr('^aeiou', '')
+=> "aeiou"
+>>
+>> "sky".tr('^aeiou', '')
+=> ""
 ```
+
 
 
 #### bubble sort (iterate through a fixed outer loop with an ever-decreasing inner loop)
