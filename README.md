@@ -20,9 +20,10 @@
 :each_char  
 :chars  
 :tr  
-:count  
+:count  (NOTE: don't forget you can use it with an arg to count occurrences of a letter in a ctring)
 :scan  
 :match  (see Smiley Face example in regex section)
+:delete (eg. string.delete!(",.;:!?") -> to remove punctuation)  
 
 
 
@@ -119,12 +120,17 @@ irb#1(main):051:0> "facetious".count("aeiou")
 ```
 
 
+match - can use a regex or this will convert the arg into a regex if you give it a string  
+```
+str.match(substring)
+```
+
+
 ## Array
 ```
 >> [1,2,3].class.ancestors
 => [Array, Enumerable, Object, Kernel, BasicObject]
 ```
-:count  
 :length  
 :size # alias for :length  
 :count  
@@ -154,7 +160,9 @@ irb#1(main):051:0> "facetious".count("aeiou")
 :compact  
 :select  
 :reject  
+:sort  
 :sort_by  
+:sort_by!
 :to_h  (converts nested array of two-element arrays to a hash)  
 
 
@@ -207,6 +215,8 @@ reduce
 ```
 > array = [1, 2, 3, 4]       # => [1, 2, 3, 4]
 > array.reduce(0, :+) => 10  # initial value is 0; action is to sum each element
+
+
 ```
 
 map  
@@ -866,6 +876,18 @@ global substitution)
 >>
 >> "sky".tr('^aeiou', '')
 => ""
+
+# remove punctuation from a string:
+
+irb(main):1338:0> string = "How, are; you. my friend:"
+=> "How, are; you. my friend:"
+irb(main):1339:0>
+irb(main):1340:0> words = string.tr(",;:.", "")
+=> "How are you my friend"
+irb(main):1341:0>
+irb(main):1342:0> words = string.tr(",;:.", "").split(" ")
+=> ["How", "are", "you", "my", "friend"]
+irb(main):1343:0>
 ```
 
 
