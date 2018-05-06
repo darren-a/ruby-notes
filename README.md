@@ -20,10 +20,14 @@
 :each_char  
 :chars  
 :tr  
-:count  (NOTE: don't forget you can use it with an arg to count occurrences of a letter in a ctring)
+:count  (NOTE: don't forget you can use it with an arg to count occurrences of a letter in a string)
 :scan  
 :match  (see Smiley Face example in regex section)
 :delete (eg. string.delete!(",.;:!?") -> to remove punctuation)  
+:sub  
+:gsub  
+:squeeze  
+
 
 
 
@@ -60,6 +64,15 @@ NoMethodError (undefined method `first' for "qwer":String)
 => 4
 >> arr.length
 => 4
+```
+
+simple substring test  
+```
+irb(main):037:0> "apples".include?("app")
+=> true
+irb(main):038:0>
+irb(main):039:0> "apples".match?(/app/)
+=> true
 ```
 
 strip whitespace (from front and back of string)
@@ -125,6 +138,22 @@ match - can use a regex or this will convert the arg into a regex if you give it
 str.match(substring)
 ```
 
+using squeeze to replace all repeats by the first character in the chain:  
+```
+irb(main):597:0> 'AAAABBBCCDAABBB'.squeeze
+=> "ABCDAB"
+irb(main):599:0> 'AAAABBBCCDAABBB'.squeeze.split("")
+=> ["A", "B", "C", "D", "A", "B"]
+irb(main):604:0> 'ABBCcAD'.squeeze
+=> "ABCcAD"
+
+# from rubydoc:
+"yellow moon".squeeze                  #=> "yelow mon"
+"  now   is  the".squeeze(" ")         #=> " now is the"
+"putters shoot balls".squeeze("m-z")   #=> "puters shot balls"
+```
+
+
 
 ## Array
 ```
@@ -170,8 +199,14 @@ str.match(substring)
 
 shortcut for strings so you don't need to type " " etc:  
 ```
-irb(main):021:0> arr = %w[a, b, c, d, e, f, g]
-=> ["a,", "b,", "c,", "d,", "e,", "f,", "g"]
+irb(main):234:0> %w[r t y u]
+=> ["r", "t", "y", "u"]
+# you can also use ( ) or { } for this  
+```
+shortcut for symbols  
+```
+irb(main):228:0> %i[CA DE NY]
+=> [:CA, :DE, :NY]
 ```
 
 often better, create array from a range:  
@@ -216,13 +251,73 @@ reduce
 > array = [1, 2, 3, 4]       # => [1, 2, 3, 4]
 > array.reduce(0, :+) => 10  # initial value is 0; action is to sum each element
 
-
+# from ruby doc
+# Sum some numbers
+(5..10).reduce(:+)                             #=> 45
+# Same using a block and inject
+(5..10).inject { |sum, n| sum + n }            #=> 45
+# Multiply some numbers
+(5..10).reduce(1, :*)                          #=> 151200
 ```
+
+reduce example acting on array element and index in combination:  
+```
+def array_sum_with_index(arr)
+
+  arr.each_with_index.reduce(0) do |acc, (el, idx)|
+    acc + el * idx
+  end
+end
+
+# start with 0 valued accumulator
+# multiply element by its index  
+# add that value to the accumulator for each loop through the array  
+
+# (2 * 0) + (3 * 1) + (6 * 2) = 15
+irb(main):084:0> array_sum_with_index([2, 3, 6])
+=> 15
+
+acc = 0
+el = 2
+idx = 0
+
+result of reduce is 0 + (2 * 0) -> 0 (this is the new acc value)
+
+acc = 0
+el = 3
+idx = 1
+
+result of reduce is 0 + (3 * 1) -> 3 (this is the new acc value)
+
+acc = 3
+el = 6
+idx = 2
+
+result of reduce is 3 + (6 * 2) -> 15 (this is the new acc value)
+
+value returned = 15
+```
+
+
 
 map  
 
 
 map.with_index  (NOTE: this is chained, not a single method)
+
+
+getting slices  
+- each_slice returns an enumerator object if you don't give it a block   
+
+```
+(1..10).each_slice(3) { |s| p s }
+# outputs below
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+[10]
+```
+
 
 
 
@@ -236,6 +331,27 @@ map.with_index  (NOTE: this is chained, not a single method)
 :last  
 :each  
 :step
+
+
+count example to find number of factors of an integer:  
+```
+irb(main):201:0> def num_factors(number)
+irb(main):202:1>   (1..number).count { |n| number % n == 0 }
+irb(main):203:1> end
+=> :num_factors  
+irb(main):206:0> num_factors(2)
+=> 2
+irb(main):207:0>
+irb(main):208:0> num_factors(17)
+=> 2
+irb(main):209:0>
+irb(main):210:0> num_factors(60)
+=> 12
+irb(main):211:0>
+irb(main):212:0> num_factors(12)
+=> 6
+irb(main):213:0>
+```
 
 
 ```
@@ -306,6 +422,25 @@ irb(main):105:0> (1..7).each {|n| puts n if n == 2..n >= 5}
 => 1..7
 ```
 
+using a range for a countdown by making an array then reversing it
+```
+(1..n/2).to_a.reverse.each do |div|
+    return div if n % div == 0
+  end
+```
+another way:
+```
+(n/2).downto(1) do ... #etc
+>>
+irb(main):282:0> 5.downto(1) { |i| p 2 * i }
+10
+8
+6
+4
+2
+=> 5
+```
+
 
 
 ## Hash
@@ -331,16 +466,63 @@ irb(main):105:0> (1..7).each {|n| puts n if n == 2..n >= 5}
 :select  
 :reject  
 :delete  
-:sort_by  (ex to sort by key  
-  ```
+:sort_by  (ex to sort by key => but note sort order here is based on alphanumeric)
+
+
+Preferred method for setting default values  
+```
+irb(main):071:0> my_hash = Hash.new { |h,k| h[k] = "blank" }
+=> {}
+> # note that this gives a default value to an unknown key *and* inserts
+> # that key:value pair into the array.
+>
+> # ...whereas this default setting version does not:  
+irb(main):088:0> yr_hash = Hash.new("blank")
+=> {}
+irb(main):089:0> yr_hash[:r]
+=> "blank"
+irb(main):090:0> yr_hash
+=> {}
+>
+> #...nor does this  
+irb(main):094:0> their_hash = Hash.new{"blank"}
+=> {}
+irb(main):095:0> their_hash[:r]
+=> "blank"
+irb(main):096:0> their_hash
+=> {}
+```
+
+
+
+```
   my_hash = {b: 11, a: 100, c: -25}
   my_hash.sort_by {|k, v| k} #=> [[:a, 100], [:b, 11], [:c, -25]]
-  ```
+```
 :include? # tests if hash includes its arg as a key  
 :has_key?  (same as "include?")  
 :key?  (same as "include?")  
 :empty?  
 :any?    
+
+create hash with default value (in this case 0)   
+```
+irb(main):085:0> my_hash = Hash.new(0)
+=> {}
+irb(main):089:0> my_hash[:df]
+=> 0
+irb(main):092:0> my_hash["some_key"]
+=> 0
+irb(main):093:0> my_hash[:some_key]
+=> 0
+irb(main):094:0> my_hash[4]
+=> 0
+irb(main):095:0>
+irb(main):096:0> my_hash["a_key"] = 343
+=> 343
+irb(main):097:0> my_hash
+=> {"a_key"=>343}
+```
 
 shortcut for creation if using symbol keys (v common):
 ```
@@ -440,6 +622,19 @@ irb(main):598:0> frequency_array[-2].first  # return the first element from the 
 => [Float, Numeric, Comparable, Object, Kernel, BasicObject]
 ```
 
+I expected infinity to be part of Math class but it isn't  
+```
+irb(main):061:0> Float::INFINITY
+=> Infinity
+```
+
+NaN  
+```
+irb(main):071:0> Float::NAN
+=> NaN
+```
+
+
 
 ## Integer
 ```
@@ -485,6 +680,20 @@ downto example:
 print "  Liftoff!\n"
 #=> "5.. 4.. 3.. 2.. 1..   Liftoff!"
 ```
+
+gcd, lcm etc  
+```
+36.gcd(60) #=> 12
+2.gcd(2) #=> 2
+
+36.lcm(60) #=> 180
+2.lcm(2) #=> 2
+
+36.gcdlcm(60)  #=> [12, 180]
+2.gcdlcm(2)  #=> [2, 2]
+```
+
+
 
 
 ## Math
